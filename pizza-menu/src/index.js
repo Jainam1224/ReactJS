@@ -77,12 +77,12 @@ function Footer() {
   );
 }
 
-function Order(props) {
+function Order({ openHour, closeHour }) {
   return (
     <div className="order">
       <p>
-        We are open from {props.openHour}:00 to {props.closeHour}:00. Come visit
-        us or order online.
+        We are open from {openHour}:00 to {closeHour}:00. Come visit us or order
+        online.
       </p>
       <button className="btn">Order Now</button>
     </div>
@@ -114,15 +114,13 @@ function Menu() {
   );
 }
 
-function Pizza(props) {
+function Pizza({ pizzaObj }) {
   return (
     <li className="pizza">
-      <img src={props.pizzaObj.photoName} alt={props.pizzaObj.name} />
-      <h3>{props.pizzaObj.name}</h3>
-      <p>{props.pizzaObj.ingredients}</p>
-      <span>
-        {props.pizzaObj.price ? `$${props.pizzaObj.price}` : "SOLD OUT"}
-      </span>
+      <img src={pizzaObj.photoName} alt={pizzaObj.name} />
+      <h3>{pizzaObj.name}</h3>
+      <p>{pizzaObj.ingredients}</p>
+      <span>{pizzaObj.price ? `$${pizzaObj.price}` : "SOLD OUT"}</span>
     </li>
   );
 }
