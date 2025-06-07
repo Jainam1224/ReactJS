@@ -58,22 +58,52 @@ function Header() {
 }
 
 function Footer() {
+  const hour = new Date().getHours();
+  const openHour = 12;
+  const closeHour = 24;
+  const isOpen = hour >= openHour && hour <= closeHour;
+
   return (
     <footer className="footer">
-      <h1>We are open!</h1>
+      {isOpen ? (
+        <div className="order">
+          <p>
+            We are open from {openHour}:00 to {closeHour}:00. Come visit us or
+            order online.
+          </p>
+          <button className="btn">Order Now</button>
+        </div>
+      ) : (
+        <p>
+          Sorry, we are closed. We open at {openHour}:00 and close at{" "}
+          {closeHour}:00.
+        </p>
+      )}
     </footer>
   );
 }
 
 function Menu() {
+  const numberOfPizzas = pizzaData.length;
   return (
     <div className="menu">
       <h2>Our Menu</h2>
-      <ul className="pizzas">
-        {pizzaData.map((pizza, index) => {
-          return <Pizza key={index} pizzaObj={pizza} />;
-        })}
-      </ul>
+      {numberOfPizzas > 0 ? (
+        <>
+          <p>
+            Authentic Italian cuisine. 6 creative dishes to choose from. All
+            from our stone oven, all organic, all delicious.
+          </p>
+
+          <ul className="pizzas">
+            {pizzaData.map((pizza) => (
+              <Pizza pizzaObj={pizza} key={pizza.name} />
+            ))}
+          </ul>
+        </>
+      ) : (
+        <p>We're still working on our menu. Please come back later :)</p>
+      )}
     </div>
   );
 }
