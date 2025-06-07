@@ -69,16 +69,26 @@ function Menu() {
   return (
     <div className="menu">
       <h2>Our Menu</h2>
-      <Pizza />
-      <Pizza />
-      <Pizza />
-      <Pizza />
+      <ul className="pizzas">
+        {pizzaData.map((pizza, index) => {
+          return <Pizza key={index} pizzaObj={pizza} />;
+        })}
+      </ul>
     </div>
   );
 }
 
-function Pizza() {
-  return <h3>Pizza Menu</h3>;
+function Pizza(props) {
+  return (
+    <li className="pizza">
+      <img src={props.pizzaObj.photoName} alt={props.pizzaObj.name} />
+      <h3>{props.pizzaObj.name}</h3>
+      <p>{props.pizzaObj.ingredients}</p>
+      <span>
+        {props.pizzaObj.price ? `$${props.pizzaObj.price}` : "SOLD OUT"}
+      </span>
+    </li>
+  );
 }
 
 function App() {
@@ -98,12 +108,28 @@ export default App;
 
 // React v18
 // This is the entry point for a React application.
-const root = ReactDOM.createRoot(document.getElementById("root"));
-root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
-);
+// const root = ReactDOM.createRoot(document.getElementById("root"));
+// root.render(
+//   <React.StrictMode>
+//     <App />
+//   </React.StrictMode>
+// );
+
+// In the above code, we encountered a issue related to root.render being called multiple times.
+// This can happen if the script is loaded multiple times or if the component is re-rendered unnecessarily.
+// Below change fix the issue by ensuring that the root is only rendered once.
+let container = null;
+document.addEventListener("DOMContentLoaded", function () {
+  if (!container) {
+    container = document.getElementById("root");
+    const root = ReactDOM.createRoot(container);
+    root.render(
+      <React.StrictMode>
+        <App />
+      </React.StrictMode>
+    );
+  }
+});
 
 // React before 18
 // ReactDOM.render(<App />, document.getElementById("root"));
