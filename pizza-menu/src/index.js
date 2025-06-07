@@ -59,20 +59,14 @@ function Header() {
 
 function Footer() {
   const hour = new Date().getHours();
-  const openHour = 12;
-  const closeHour = 24;
+  const openHour = 0;
+  const closeHour = 22;
   const isOpen = hour >= openHour && hour <= closeHour;
 
   return (
     <footer className="footer">
       {isOpen ? (
-        <div className="order">
-          <p>
-            We are open from {openHour}:00 to {closeHour}:00. Come visit us or
-            order online.
-          </p>
-          <button className="btn">Order Now</button>
-        </div>
+        <Order openHour={openHour} closeHour={closeHour} />
       ) : (
         <p>
           Sorry, we are closed. We open at {openHour}:00 and close at{" "}
@@ -80,6 +74,18 @@ function Footer() {
         </p>
       )}
     </footer>
+  );
+}
+
+function Order(props) {
+  return (
+    <div className="order">
+      <p>
+        We are open from {props.openHour}:00 to {props.closeHour}:00. Come visit
+        us or order online.
+      </p>
+      <button className="btn">Order Now</button>
+    </div>
   );
 }
 
