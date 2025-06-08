@@ -3,13 +3,13 @@ const initialFriends = [
     id: 118836,
     name: "Clark",
     image: "https://i.pravatar.cc/48?u=118836",
-    balance: -7,
+    balance: -700,
   },
   {
     id: 933372,
     name: "Sarah",
     image: "https://i.pravatar.cc/48?u=933372",
-    balance: 20,
+    balance: 200,
   },
   {
     id: 499476,
@@ -20,5 +20,43 @@ const initialFriends = [
 ];
 
 export default function App() {
-  return <h1>Eat-N-Split</h1>;
+  return (
+    <div className="app">
+      <div className="sidebar">
+        <FriendsList />
+      </div>
+    </div>
+  );
+}
+
+function FriendsList() {
+  return (
+    <ul>
+      {initialFriends.map((friend) => (
+        <Friend friend={friend} key={friend.id} />
+      ))}
+    </ul>
+  );
+}
+
+function Friend({ friend }) {
+  return (
+    <li key={friend.id}>
+      <img src={friend.image} alt={friend.name} />
+      <span>{friend.name}</span>
+      {friend.balance < 0 && (
+        <p className="red">
+          You owe {friend.name} {Math.abs(friend.balance)}₹
+        </p>
+      )}
+      {friend.balance > 0 && (
+        <p className="green">
+          {friend.name} owes you {Math.abs(friend.balance)}₹
+        </p>
+      )}
+      {friend.balance === 0 && <p>You and {friend.name} are even</p>}
+
+      <button className="button">Select</button>
+    </li>
+  );
 }
