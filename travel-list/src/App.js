@@ -27,7 +27,26 @@ function Form() {
 }
 
 function PackingList() {
-  return <div className="list">List of items to pack</div>;
+  return (
+    <div className="list">
+      <ul>
+        {initialItems.map((item) => (
+          <Item key={item.id} item={item} />
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+function Item({ item }) {
+  return (
+    <li>
+      <span style={{ textDecoration: item.packed ? "line-through" : "none" }}>
+        {item.quantity} {item.description}
+      </span>
+      <button>❌</button>
+    </li>
+  );
 }
 
 function Stats() {
