@@ -23,6 +23,11 @@ function Logo() {
 function Form() {
   const [description, setDescription] = useState("");
   const [quantity, setQuantity] = useState(1);
+  const [items, setItems] = useState(initialItems);
+
+  const handleNewItem = (newItem) => {
+    setItems((prevItems) => [...prevItems, newItem]);
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault(); // reload of page to be avoided when submitting the form
@@ -38,7 +43,7 @@ function Form() {
       packed: false,
     };
 
-    console.log("Adding item:", newItem);
+    handleNewItem(newItem);
     setDescription(""); // Clear input field after submission
     setQuantity(1); // Reset quantity to 1 after submission
   };
