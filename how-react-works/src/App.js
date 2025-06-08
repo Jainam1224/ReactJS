@@ -26,6 +26,12 @@ export default function App() {
   );
 }
 
+// console.log(<DifferentContent test={23} />); // This is how we call the component with JSX syntax.
+
+// Below console is not the component call, it is just like a regular function call which has no type of component but a raw element.
+// We should not use this way to call a component.
+// console.log(DifferentContent());
+
 function Tabbed({ content }) {
   const [activeTab, setActiveTab] = useState(0);
 
