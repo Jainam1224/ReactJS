@@ -141,6 +141,15 @@ function MovieDetails({
   const [isLoading, setIsLoading] = useState(false);
   const [userRating, setUserRating] = useState("");
 
+  const countRef = useRef(0);
+
+  useEffect(
+    function () {
+      if (userRating) countRef.current += 1;
+    },
+    [userRating]
+  );
+
   const {
     Title: title,
     Year: year,
@@ -171,6 +180,7 @@ function MovieDetails({
       imdbRating: Number(imdbRating),
       runtime: Number(runtime.split(" ").at(0)),
       userRating,
+      countRatingDecision: countRef.current,
     };
 
     onAddWatched(newWatchedMovie);
