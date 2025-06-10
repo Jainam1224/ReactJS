@@ -58,6 +58,7 @@ export default function App() {
   const [watched, setWatched] = useState(tempWatchedData);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(false);
+  const [selectedMovieId, setSelectedMovieId] = useState(null);
 
   // Doing setState like this will make infinte calls and go into infite loop.
   // As we upated the state then it re-renders once state is updated then again we update the state and it goes onn...
@@ -119,6 +120,14 @@ export default function App() {
     [query]
   );
 
+  function handlMovieSelect(id) {
+    setSelectedMovieId((selectedId) => (selectedId === id ? null : id));
+  }
+
+  function handlMovieSelectClose() {
+    setSelectedMovieId(null);
+  }
+
   return (
     <>
       <NavBar>
@@ -128,15 +137,36 @@ export default function App() {
       <Main>
         <ListBox>
           {isLoading && <Loader />}
-          {!isLoading && !error && <MoviesList movies={movies} />}
+          {!isLoading && !error && (
+            <MoviesList movies={movies} onMovieSelect={handlMovieSelect} />
+          )}
           {error && <ErrorMessage message={error} />}
         </ListBox>
         <ListBox>
-          <WatchedSummary watched={watched} />
-          <WatchedMoviesList watched={watched} />
+          {selectedMovieId ? (
+            <MovieDetails
+              selectedMovieId={selectedMovieId}
+              onMovieSelectClose={handlMovieSelectClose}
+            />
+          ) : (
+            <>
+              <WatchedSummary watched={watched} />
+              <WatchedMoviesList watched={watched} />
+            </>
+          )}
         </ListBox>
       </Main>
     </>
+  );
+}
+
+function MovieDetails({ selectedMovieId, onMovieSelectClose }) {
+  return (
+    <div className="details">
+      <button className="btn-back" onClick={() => onMovieSelectClose()}>
+        &larr;
+      </button>
+    </div>
   );
 }
 
@@ -203,19 +233,24 @@ function ListBox({ children }) {
   );
 }
 
-function MoviesList({ movies }) {
+function MoviesList({ movies, onMovieSelect }) {
   return (
-    <ul className="list">
+    <ul className="list list-movies">
       {movies?.map((movie) => (
-        <Movie key={movie.imdbID} movie={movie} />
+        <Movie key={movie.imdbID} movie={movie} onMovieSelect={onMovieSelect} />
       ))}
     </ul>
   );
 }
 
-function Movie({ movie }) {
+function Movie({ movie, onMovieSelect }) {
   return (
-    <li key={movie.imdbID}>
+    <li
+      key={movie.imdbID}
+      onClick={() => {
+        onMovieSelect(movie.imdbID);
+      }}
+    >
       <img src={movie.Poster} alt={`${movie.Title} poster`} />
       <h3>{movie.Title}</h3>
       <div>
