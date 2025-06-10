@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import StarRating from "./StarRating";
 import { useMovies } from "./useMovies";
 import { useLocalStorageState } from "./useLocalStorageState";
+import { useKey } from "./useKey";
 
 const average = (arr) =>
   arr.reduce((acc, cur, i, arr) => acc + cur / arr.length, 0);
@@ -126,21 +127,7 @@ function MovieDetails({
     onMovieSelectClose();
   }
 
-  useEffect(
-    function () {
-      function callback(e) {
-        if (e.code === "Escape") {
-          onMovieSelectClose();
-        }
-      }
-      document.addEventListener("keydown", callback);
-
-      return () => {
-        document.removeEventListener("keydown", callback);
-      };
-    },
-    [onMovieSelectClose]
-  );
+  useKey("Escape", onMovieSelectClose);
 
   useEffect(
     function () {
@@ -254,40 +241,13 @@ function Logo() {
 }
 
 function Search({ query, setQuery }) {
-  // Using this approach to focus the input element is not recommended,
-  // instead, we should use a ref.
-  // useEffect(function () {
-  //   const el = document.querySelector(".search");
-  //   console.log(el);
-  //   el.focus();
-  // }, []);
-
   const inputEl = useRef(null);
 
-  // when the component mounts, focus the input element
-  useEffect(function () {
+  useKey("Enter", function () {
+    if (document.activeElement === inputEl.current) return;
+    setQuery("");
     inputEl.current.focus();
-  }, []);
-
-  // when enter key is pressed, focus the input element
-  useEffect(
-    function () {
-      function callback(e) {
-        if (document.activeElement === inputEl.current) return;
-
-        if (e.code === "Enter") {
-          setQuery("");
-          inputEl.current.focus();
-        }
-      }
-      document.addEventListener("keydown", callback);
-
-      return () => {
-        document.removeEventListener("keydown", callback);
-      };
-    },
-    [setQuery]
-  );
+  });
 
   return (
     <input
