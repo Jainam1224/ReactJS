@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import StarRating from "./StarRating";
 
 const tempMovieData = [
   {
@@ -161,11 +162,74 @@ export default function App() {
 }
 
 function MovieDetails({ selectedMovieId, onMovieSelectClose }) {
+  const [movieDetails, setMovieDetails] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
+
+  const {
+    Title: title,
+    Year: year,
+    Poster: poster,
+    Runtime: runtime,
+    imdbRating,
+    Plot: plot,
+    Actors: actors,
+    Director: director,
+    Genre: genre,
+    Released: released,
+  } = movieDetails;
+
+  useEffect(
+    function () {
+      async function getMovieDetails() {
+        setIsLoading(true);
+        const res = await fetch(
+          `http://www.omdbapi.com/?apikey=${KEY}&i=${selectedMovieId}`
+        );
+
+        const data = await res.json();
+        setMovieDetails(data);
+        setIsLoading(false);
+      }
+      getMovieDetails();
+    },
+    [selectedMovieId]
+  );
+
   return (
     <div className="details">
-      <button className="btn-back" onClick={() => onMovieSelectClose()}>
-        &larr;
-      </button>
+      {isLoading ? (
+        <Loader />
+      ) : (
+        <>
+          <header>
+            <button className="btn-back" onClick={onMovieSelectClose}>
+              &larr;
+            </button>
+            <img src={poster} alt={`Poster of ${title} movie`} />
+            <div className="details-overview">
+              <h2>{title}</h2>
+              <p>
+                {released} &bull; {runtime}
+              </p>
+              <p>{genre}</p>
+              <p>
+                <span>⭐️</span>
+                {imdbRating} IMDb rating
+              </p>
+            </div>
+          </header>
+          <section>
+            <div className="rating">
+              <StarRating maxRating={10} size={24} />
+            </div>
+            <p>
+              <em>{plot}</em>
+            </p>
+            <p>Starring {actors}</p>
+            <p>Directed by {director}</p>
+          </section>
+        </>
+      )}
     </div>
   );
 }
