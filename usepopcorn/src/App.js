@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const tempMovieData = [
   {
@@ -58,9 +58,18 @@ export default function App() {
 
   // Doing setState like this will make infinte calls and go into infite loop.
   // As we upated the state then it re-renders once state is updated then again we update the state and it goes onn...
-  fetch(`http://www.omdbapi.com/?apikey=${KEY}&s=interstellar`)
-    .then((res) => res.json())
-    .then((data) => setMovies(data.Search));
+  // fetch(`http://www.omdbapi.com/?apikey=${KEY}&s=interstellar`)
+  //   .then((res) => res.json())
+  //   .then((data) => setMovies(data.Search));
+
+  // correct way to fetch the data and update the state
+  // As we have given empty array [] (dependency) it will run only once when component gets painted
+  // and it will fetch and update the state.
+  useEffect(function () {
+    fetch(`http://www.omdbapi.com/?apikey=${KEY}&s=interstellar`)
+      .then((res) => res.json())
+      .then((data) => setMovies(data.Search));
+  }, []);
 
   return (
     <>
