@@ -194,6 +194,11 @@ function MovieDetails({
     function () {
       if (!title) return;
       document.title = `MOVIE - ${title}`;
+
+      return () => {
+        document.title = "usePopcorn";
+        // console.log(`Clean up effect for movie ${title}`);
+      };
     },
     [title]
   );
