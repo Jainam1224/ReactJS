@@ -9,15 +9,25 @@ const KEY = "52af4736";
 export default function App() {
   const [query, setQuery] = useState("");
   const [movies, setMovies] = useState([]);
-  // const [watched, setWatched] = useState([]);
+  const [watched, setWatched] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(false);
   const [selectedMovieId, setSelectedMovieId] = useState(null);
 
-  const [watched, setWatched] = useState(function () {
-    const storedWatched = localStorage.getItem("watched");
-    return storedWatched ? JSON.parse(storedWatched) : [];
-  });
+  // Doing setState like this will make infinte calls and go into infite loop.
+  // As we upated the state then it re-renders once state is updated then again we update the state and it goes onn...
+  // fetch(`http://www.omdbapi.com/?apikey=${KEY}&s=interstellar`)
+  //   .then((res) => res.json())
+  //   .then((data) => setMovies(data.Search));
+
+  // correct way to fetch the data and update the state
+  // As we have given empty array [] (dependency) it will run only once when component gets painted
+  // and it will fetch and update the state.
+  // useEffect(function () {
+  //   fetch(`http://www.omdbapi.com/?apikey=${KEY}&s=interstellar`)
+  //     .then((res) => res.json())
+  //     .then((data) => setMovies(data.Search));
+  // }, []);
 
   useEffect(
     function () {
@@ -44,8 +54,12 @@ export default function App() {
           }
 
           setMovies(data.Search);
+          // As setState is asynchronous call so it won't immediately set the movies so output would be [] for movies
+          // and we will get data in data.Search.
+          // console.log(movies, data.Search);
           setError("");
         } catch (err) {
+          console.log("Error", err, error.message);
           if (err.message !== "AbortError") setError(err.message);
         } finally {
           setIsLoading(false);
@@ -78,21 +92,11 @@ export default function App() {
 
   function handleAddWatched(movie) {
     setWatched((watched) => [...watched, movie]);
-    // 1st way
-    // localStorage.setItem("watched", JSON.stringify([...watched, movie]));
   }
 
   function handleDeleteWatched(id) {
     setWatched((watched) => watched.filter((movie) => movie.imdbID !== id));
   }
-
-  // 2nd way
-  useEffect(
-    function () {
-      localStorage.setItem("watched", JSON.stringify(watched));
-    },
-    [watched]
-  );
 
   return (
     <>
@@ -182,6 +186,7 @@ function MovieDetails({
       function callback(e) {
         if (e.code === "Escape") {
           onMovieSelectClose();
+          console.log("CLOSING");
         }
       }
       document.addEventListener("keydown", callback);
@@ -217,6 +222,7 @@ function MovieDetails({
 
       return () => {
         document.title = "usePopcorn";
+        // console.log(`Clean up effect for movie ${title}`);
       };
     },
     [title]
