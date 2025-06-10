@@ -51,10 +51,12 @@ const average = (arr) =>
   arr.reduce((acc, cur, i, arr) => acc + cur / arr.length, 0);
 
 const KEY = "52af4736";
+const QUERY = "interstellar";
 
 export default function App() {
   const [movies, setMovies] = useState([]);
   const [watched, setWatched] = useState(tempWatchedData);
+  const [isLoading, setIsLoading] = useState(false);
 
   // Doing setState like this will make infinte calls and go into infite loop.
   // As we upated the state then it re-renders once state is updated then again we update the state and it goes onn...
@@ -65,10 +67,26 @@ export default function App() {
   // correct way to fetch the data and update the state
   // As we have given empty array [] (dependency) it will run only once when component gets painted
   // and it will fetch and update the state.
+  // useEffect(function () {
+  //   fetch(`http://www.omdbapi.com/?apikey=${KEY}&s=interstellar`)
+  //     .then((res) => res.json())
+  //     .then((data) => setMovies(data.Search));
+  // }, []);
+
   useEffect(function () {
-    fetch(`http://www.omdbapi.com/?apikey=${KEY}&s=interstellar`)
-      .then((res) => res.json())
-      .then((data) => setMovies(data.Search));
+    async function fetchMovies() {
+      setIsLoading(true);
+      const res = await fetch(
+        `http://www.omdbapi.com/?apikey=${KEY}&s=${QUERY}`
+      );
+      const data = await res.json();
+      setMovies(data.Search);
+      // As setState is asynchronous call so it won't immediately set the movies so output would be [] for movies
+      // and we will get data in data.Search.
+      // console.log(movies, data.Search);
+      setIsLoading(false);
+    }
+    fetchMovies();
   }, []);
 
   return (
@@ -79,7 +97,7 @@ export default function App() {
       </NavBar>
       <Main>
         <ListBox>
-          <MoviesList movies={movies} />
+          {isLoading ? <Loader /> : <MoviesList movies={movies} />}
         </ListBox>
         <ListBox>
           <WatchedSummary watched={watched} />
@@ -88,6 +106,10 @@ export default function App() {
       </Main>
     </>
   );
+}
+
+function Loader() {
+  return <p className="loader">Loading...</p>;
 }
 
 function NavBar({ children }) {
@@ -125,7 +147,7 @@ function Search() {
 function NumResults({ movies }) {
   return (
     <p className="num-results">
-      Found <strong>{movies.length}</strong> results
+      Found <strong>{movies?.length}</strong> results
     </p>
   );
 }
