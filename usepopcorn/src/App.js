@@ -51,9 +51,9 @@ const average = (arr) =>
   arr.reduce((acc, cur, i, arr) => acc + cur / arr.length, 0);
 
 const KEY = "52af4736";
-const QUERY = "interstellar";
 
 export default function App() {
+  const [query, setQuery] = useState("inception");
   const [movies, setMovies] = useState([]);
   const [watched, setWatched] = useState(tempWatchedData);
   const [isLoading, setIsLoading] = useState(false);
@@ -74,42 +74,55 @@ export default function App() {
   //     .then((data) => setMovies(data.Search));
   // }, []);
 
-  useEffect(function () {
-    async function fetchMovies() {
-      try {
-        setIsLoading(true);
-        const res = await fetch(
-          `http://www.omdbapi.com/?apikey=${KEY}&s=${QUERY}`
-        );
+  useEffect(
+    function () {
+      async function fetchMovies() {
+        try {
+          setIsLoading(true);
+          setError("");
 
-        if (!res.ok) {
-          throw new Error("Something went wrong with fetching movies data");
+          const res = await fetch(
+            `http://www.omdbapi.com/?apikey=${KEY}&s=${query}`
+          );
+
+          if (!res.ok) {
+            throw new Error("Something went wrong with fetching movies data");
+          }
+
+          const data = await res.json();
+
+          if (data.Response === "False") {
+            throw new Error("Movies not found");
+          }
+
+          setMovies(data.Search);
+          // As setState is asynchronous call so it won't immediately set the movies so output would be [] for movies
+          // and we will get data in data.Search.
+          // console.log(movies, data.Search);
+        } catch (err) {
+          console.log("Error", err, error.message);
+          setError(err.message);
+        } finally {
+          setIsLoading(false);
+          setError("");
         }
-
-        const data = await res.json();
-
-        if (data.Response === "False") {
-          throw new Error("Movies not found");
-        }
-
-        setMovies(data.Search);
-        // As setState is asynchronous call so it won't immediately set the movies so output would be [] for movies
-        // and we will get data in data.Search.
-        // console.log(movies, data.Search);
-      } catch (err) {
-        console.log(error.message);
-        setError(err.message);
-      } finally {
-        setIsLoading(false);
       }
-    }
-    fetchMovies();
-  }, []);
+
+      if (query.length < 3) {
+        setMovies([]);
+        setError("");
+        return;
+      }
+
+      fetchMovies();
+    },
+    [query]
+  );
 
   return (
     <>
       <NavBar>
-        <Search />
+        <Search query={query} setQuery={setQuery} />
         <NumResults movies={movies} />
       </NavBar>
       <Main>
@@ -153,9 +166,7 @@ function Logo() {
   );
 }
 
-function Search() {
-  const [query, setQuery] = useState("");
-
+function Search({ query, setQuery }) {
   return (
     <input
       className="search"
