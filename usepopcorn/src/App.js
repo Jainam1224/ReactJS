@@ -31,13 +31,16 @@ export default function App() {
 
   useEffect(
     function () {
+      const controller = new AbortController();
+
       async function fetchMovies() {
         try {
           setIsLoading(true);
           setError("");
 
           const res = await fetch(
-            `http://www.omdbapi.com/?apikey=${KEY}&s=${query}`
+            `http://www.omdbapi.com/?apikey=${KEY}&s=${query}`,
+            { signal: controller.signal }
           );
 
           if (!res.ok) {
@@ -54,9 +57,10 @@ export default function App() {
           // As setState is asynchronous call so it won't immediately set the movies so output would be [] for movies
           // and we will get data in data.Search.
           // console.log(movies, data.Search);
+          setError("");
         } catch (err) {
           console.log("Error", err, error.message);
-          setError(err.message);
+          if (err.message !== "AbortError") setError(err.message);
         } finally {
           setIsLoading(false);
           setError("");
@@ -70,6 +74,10 @@ export default function App() {
       }
 
       fetchMovies();
+
+      return () => {
+        controller.abort(); // cancel the curent req when re-redering happens
+      };
     },
     [query]
   );
