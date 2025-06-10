@@ -4,31 +4,29 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      count: 5,
+      location: "Surat",
     };
 
-    this.handleDecrement = this.handleDecrement.bind(this);
-    this.handleIncrement = this.handleIncrement.bind(this);
+    this.fetchWeatherData = this.fetchWeatherData.bind(this);
   }
 
-  handleDecrement() {
-    this.setState((prevState) => ({
-      count: prevState.count - 1,
-    }));
-  }
-
-  handleIncrement() {
-    this.setState((prevState) => ({
-      count: prevState.count + 1,
-    }));
-  }
+  fetchWeatherData = async () => {
+    console.log("Loading...");
+  };
 
   render() {
     return (
-      <div>
-        <button onClick={this.handleDecrement}>-</button>
-        <span>{this.state.count}</span>
-        <button onClick={this.handleIncrement}>+</button>
+      <div className="app">
+        <h1>Classy Weather</h1>
+        <input
+          type="text"
+          placeholder="Search for location..."
+          value={this.state.location}
+          onChange={(e) => this.setState({ location: e.target.value })}
+        />
+        <button type="" onClick={this.fetchWeatherData}>
+          Get Weather
+        </button>
       </div>
     );
   }
