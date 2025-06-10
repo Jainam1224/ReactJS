@@ -190,6 +190,14 @@ function MovieDetails({
     [selectedMovieId]
   );
 
+  useEffect(
+    function () {
+      if (!title) return;
+      document.title = `MOVIE - ${title}`;
+    },
+    [title]
+  );
+
   return (
     <div className="details">
       {isLoading ? (
