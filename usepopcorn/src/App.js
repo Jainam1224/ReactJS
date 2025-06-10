@@ -50,9 +50,17 @@ const tempWatchedData = [
 const average = (arr) =>
   arr.reduce((acc, cur, i, arr) => acc + cur / arr.length, 0);
 
+const KEY = "52af4736";
+
 export default function App() {
-  const [movies, setMovies] = useState(tempMovieData);
+  const [movies, setMovies] = useState([]);
   const [watched, setWatched] = useState(tempWatchedData);
+
+  // Doing setState like this will make infinte calls and go into infite loop.
+  // As we upated the state then it re-renders once state is updated then again we update the state and it goes onn...
+  fetch(`http://www.omdbapi.com/?apikey=${KEY}&s=interstellar`)
+    .then((res) => res.json())
+    .then((data) => setMovies(data.Search));
 
   return (
     <>
