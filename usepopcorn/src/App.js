@@ -57,6 +57,7 @@ export default function App() {
   const [movies, setMovies] = useState([]);
   const [watched, setWatched] = useState(tempWatchedData);
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(false);
 
   // Doing setState like this will make infinte calls and go into infite loop.
   // As we upated the state then it re-renders once state is updated then again we update the state and it goes onn...
@@ -75,16 +76,32 @@ export default function App() {
 
   useEffect(function () {
     async function fetchMovies() {
-      setIsLoading(true);
-      const res = await fetch(
-        `http://www.omdbapi.com/?apikey=${KEY}&s=${QUERY}`
-      );
-      const data = await res.json();
-      setMovies(data.Search);
-      // As setState is asynchronous call so it won't immediately set the movies so output would be [] for movies
-      // and we will get data in data.Search.
-      // console.log(movies, data.Search);
-      setIsLoading(false);
+      try {
+        setIsLoading(true);
+        const res = await fetch(
+          `http://www.omdbapi.com/?apikey=${KEY}&s=${QUERY}`
+        );
+
+        if (!res.ok) {
+          throw new Error("Something went wrong with fetching movies data");
+        }
+
+        const data = await res.json();
+
+        if (data.Response === "False") {
+          throw new Error("Movies not found");
+        }
+
+        setMovies(data.Search);
+        // As setState is asynchronous call so it won't immediately set the movies so output would be [] for movies
+        // and we will get data in data.Search.
+        // console.log(movies, data.Search);
+      } catch (err) {
+        console.log(error.message);
+        setError(err.message);
+      } finally {
+        setIsLoading(false);
+      }
     }
     fetchMovies();
   }, []);
@@ -97,7 +114,9 @@ export default function App() {
       </NavBar>
       <Main>
         <ListBox>
-          {isLoading ? <Loader /> : <MoviesList movies={movies} />}
+          {isLoading && <Loader />}
+          {!isLoading && !error && <MoviesList movies={movies} />}
+          {error && <ErrorMessage message={error} />}
         </ListBox>
         <ListBox>
           <WatchedSummary watched={watched} />
@@ -110,6 +129,10 @@ export default function App() {
 
 function Loader() {
   return <p className="loader">Loading...</p>;
+}
+
+function ErrorMessage({ message }) {
+  return <p className="error">{message}</p>;
 }
 
 function NavBar({ children }) {
