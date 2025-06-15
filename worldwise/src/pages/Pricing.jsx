@@ -1,4 +1,4 @@
-import PageNav from "../components/ProgramNav";
+import PageNav from "../components/PageNav";
 
 function Pricing() {
   return (
