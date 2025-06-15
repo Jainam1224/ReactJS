@@ -23,7 +23,6 @@ function App() {
       try {
         const res = await fetch(`${BASE_URL}/cities`);
         const data = await res.json();
-        console.log("data", data);
         setCities(data);
       } catch (err) {
         console.error("Fetch error:", err);
