@@ -1,27 +1,63 @@
 {
   "cities": [
     {
-      "id": "5f5e",
-      "cityName": "Brussels",
-      "country": "Belgium",
-      "emoji": "🇧🇪",
-      "date": "2025-06-17T06:26:44.923Z",
-      "notes": "this is very good city",
+      "id": "194d",
+      "cityName": "Medinaceli",
+      "country": "Spain",
+      "emoji": "🇪🇸",
+      "date": "2025-06-17T07:02:48.967Z",
+      "notes": "",
       "position": {
-        "lat": "50.85450904781293",
-        "lng": "4.416503906250001"
+        "lat": "41.11246878918088",
+        "lng": "-2.39501953125"
       }
     },
     {
-      "id": "331d",
-      "cityName": "Champguyon",
-      "country": "France",
-      "emoji": "🇫🇷",
-      "date": "2025-06-17T06:36:05.751Z",
+      "id": "e2d0",
+      "cityName": "Plan",
+      "country": "Spain",
+      "emoji": "🇪🇸",
+      "date": "2025-06-17T07:02:59.078Z",
       "notes": "",
       "position": {
-        "lat": "48.76343113791796",
-        "lng": "3.6035156250000004"
+        "lat": "42.53689200787317",
+        "lng": "0.32958984375000006"
+      }
+    },
+    {
+      "id": "90aa",
+      "cityName": "Villarrabe",
+      "country": "Spain",
+      "emoji": "🇪🇸",
+      "date": "2025-06-17T07:03:01.977Z",
+      "notes": "",
+      "position": {
+        "lat": "42.45588764197166",
+        "lng": "-4.7900390625"
+      }
+    },
+    {
+      "id": "9f57",
+      "cityName": "Santa-Lucia-di-Mercurio",
+      "country": "France",
+      "emoji": "🇫🇷",
+      "date": "2025-06-17T07:03:08.768Z",
+      "notes": "",
+      "position": {
+        "lat": "42.309815415686664",
+        "lng": "9.195556640625002"
+      }
+    },
+    {
+      "id": "c64c",
+      "cityName": "Kouvola",
+      "country": "Finland",
+      "emoji": "🇫🇮",
+      "date": "2025-06-17T07:03:14.548Z",
+      "notes": "",
+      "position": {
+        "lat": "60.80206374467983",
+        "lng": "26.806640625000004"
       }
     }
   ]
