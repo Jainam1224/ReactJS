@@ -1,6 +1,7 @@
 import { createContext, useEffect, useState } from "react";
 import { faker } from "@faker-js/faker";
 import { PostProvider, usePosts } from "./PostContext";
+import Test from "./Test";
 
 function createRandomPost() {
   return {
@@ -156,18 +157,21 @@ function Archive() {
         {showArchive ? "Hide archive posts" : "Show archive posts"}
       </button>
 
-      {showArchive && (
-        <ul>
-          {posts.map((post, i) => (
-            <li key={i}>
-              <p>
-                <strong>{post.title}:</strong> {post.body}
-              </p>
-              <button onClick={() => onAddPost(post)}>Add as new post</button>
-            </li>
-          ))}
-        </ul>
-      )}
+      <>
+        {showArchive && (
+          <ul>
+            {posts.map((post, i) => (
+              <li key={i}>
+                <p>
+                  <strong>{post.title}:</strong> {post.body}
+                </p>
+                <button onClick={() => onAddPost(post)}>Add as new post</button>
+              </li>
+            ))}
+          </ul>
+        )}
+        <Test />
+      </>
     </aside>
   );
 }
