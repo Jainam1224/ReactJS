@@ -84,6 +84,7 @@ function CitiesProvider({ children }) {
     fetchCities();
   }, []);
 
+  // If this callback wouldn't be present then it would go to infite loop when we added getCity as a dependency.
   const getCity = useCallback(
     async function getCity(id) {
       if (Number(id) === currentCity.id) return;
