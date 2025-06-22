@@ -1,4 +1,6 @@
 import styled from "styled-components";
+import GlobalStyles from "./styles/GlobalStyles";
+import Heading from "./ui/Heading";
 
 const H1 = styled.h1`
   font-size: 30px;
@@ -8,7 +10,8 @@ const H1 = styled.h1`
 const App = () => {
   return (
     <div>
-      <H1>The Jainam Sanghvi</H1>
+      <GlobalStyles />
+      <Heading>The Jainam Sanghvi</Heading>
     </div>
   );
 };
